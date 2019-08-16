@@ -1,0 +1,30 @@
+.menu{
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 1.2em;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.tableSelected .menu{
+  visibility: visible;
+}
+
+.iconTrash{
+  font-size: 1.2em;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
+}
+
+.tableSelected{
+  background-color: #d09237a8 !important;
+}
+
+.deleteAllSelected{
+  visibility: visible;
+}
+
+.notAllSelected{
+  visibility: hidden;
+}

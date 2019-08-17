@@ -17,7 +17,6 @@ class TableStore {
 
   constructor() {
          this.data = [];
-         this.selected = [];
      }
 
 
@@ -37,19 +36,16 @@ class TableStore {
     return this.data;
   }
 
-  @action deleteRowGl(index){
-    var removeElin = this.selected.indexOf(index);
-    // console.log(removeEl);
+  @action.bound deleteRowGl(index, selection){
+    // var removeElin = selection.indexOf(index);
     console.log(this.data.splice(index, 1));
     this.data.splice(index, 1);
-    this.selected.splice(removeElin, 1);
-    // console.log(this.selected);
-    return [this.data, this.selected]
+    return this.data
   }
 
-  @action deleteRowsMulti(){
-    this.data = this.data.filter( ( el, index ) => !this.selected.includes( index ) );
-    this.selected = [];
+  @action.bound deleteRowsMulti(selection){
+    this.data = this.data.filter( ( el, index ) => !selection.includes( index ) );
+    return this.data
   }
 
 
@@ -80,10 +76,10 @@ const Appstore = new TableStore();
       this.state.selected.splice(removeEl, 1);
   }
 
-  handleDeleteRowsMulti = () => {
+  handleDeleteRowsMulti = (selection) => {
     var newSelected = [...this.state.selected];
     const emptySelected = [];
-    this.props.store.deleteRowsMulti();
+    this.props.store.deleteRowsMulti(selection);
     this.setState({
       selected: emptySelected
     });
@@ -162,15 +158,6 @@ const Appstore = new TableStore();
   }
 
 
-  deleteRow(index) {
-
-    var removeEl = this.state.selected.indexOf(index);
-    // console.log(data.splice(index, 1));
-    // data.splice(index, 1);
-    this.state.selected.splice(removeEl, 1);
-    // this.setState({data});
-}
-
 
 
   render() {
@@ -212,7 +199,7 @@ const Appstore = new TableStore();
           <th>Last activity</th>
           <th>Frequency</th>
           <th className={(Object.keys(this.state.selected).length > 1 ? "deleteAllSelected" : "notAllSelected" )}>
-            <a className={iconTrash} title="Delete all selected" onClick={() => this.handleDeleteRowsMulti()}>
+            <a className={iconTrash} title="Delete all selected" onClick={(selection) => this.handleDeleteRowsMulti(this.state.selected)}>
               <FaTrash />
             </a>
           </th>
@@ -238,7 +225,7 @@ const Appstore = new TableStore();
             <td>{x.last_activity}</td>
             <td>{x.frequency}</td>
             <td>
-              <a className={iconStyles} onClick ={index => this.handleDeleteRows(i)}><FaTrash /></a>
+              <a className={iconStyles} onClick ={(index) => this.handleDeleteRows(i)}><FaTrash /></a>
               <a className={iconStyles}><FaEdit /></a>
             </td>
           </tr>)}
